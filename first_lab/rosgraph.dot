@@ -1,0 +1,60 @@
+digraph graphname {
+	graph [bb="0,0,577.57,145",
+		compound=True,
+		rank=same,
+		rankdir=LR,
+		ranksep=0.2
+	];
+	node [label="\N"];
+	subgraph cluster_turtle_namespace {
+		graph [bb="134.69,8,569.57,137",
+			compound=True,
+			label=turtle_namespace,
+			lheight=0.21,
+			lp="352.13,125.5",
+			lwidth=1.33,
+			rank=same,
+			rankdir=LR,
+			ranksep=0.2,
+			style=bold
+		];
+		color		 [height=0.5,
+			pos="245.69,88",
+			width=0.79437];
+		t__turtle_namespace_turtle1_cmd_vel		 [URL=topic_3A_turtle_namespace_turtle1_cmd_vel,
+			height=0.5,
+			label="/turtle_namespace/turtle1/cmd_vel",
+			pos="245.69,34",
+			shape=box,
+			width=2.8611];
+		n__turtle_namespace_simon		 [URL=_turtle_namespace_simon,
+			height=0.5,
+			label="/turtle_namespace/simon",
+			pos="462.13,34",
+			shape=ellipse,
+			width=2.7623];
+		t__turtle_namespace_turtle1_cmd_vel -> n__turtle_namespace_simon		 [penwidth=1,
+			pos="e,362.48,34 348.89,34 350.02,34 351.15,34 352.29,34"];
+	}
+	subgraph cluster_sterowanie {
+		graph [bb="8,8,126.69,83",
+			compound=True,
+			label=sterowanie,
+			lheight=0.21,
+			lp="67.345,71.5",
+			lwidth=0.82,
+			rank=same,
+			rankdir=LR,
+			ranksep=0.2,
+			style=bold
+		];
+		n__sterowanie		 [URL=_sterowanie,
+			height=0.5,
+			label="/sterowanie",
+			pos="67.345,34",
+			shape=ellipse,
+			width=1.4263];
+	}
+	n__sterowanie -> t__turtle_namespace_turtle1_cmd_vel	 [penwidth=1,
+		pos="e,142.54,34 118.88,34 123.23,34 127.74,34 132.34,34"];
+}
