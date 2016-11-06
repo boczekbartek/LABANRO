@@ -1,0 +1,60 @@
+<robot name="test_robot">
+	<link name="base_link">
+		<visual>
+			<geometry>
+				<cylinder length="1.99999" radius="0.2"/>
+			</geometry>
+			<origin xyz="0.923955 0.3824995 0" rpy="0 1.5707 0.3925" />
+		</visual>
+	</link>
+
+	<link name="link1">
+		<visual>
+			<geometry>
+				<cylinder length="1" radius="0.1"/>
+			</geometry>
+			<origin xyz="0.25023 0.43288 0" rpy="3.14 1.5707 1.04667"/>
+		</visual>
+	</link>
+
+	<link name="link2">
+		<visual>
+			<geometry>
+				<cylinder length="1" radius="0.05"/>
+			</geometry>
+			<origin xyz="0 0 0.5" rpy="0 0 0" />
+		</visual>
+	</link>
+
+	<link name="link3">
+		<visual>
+			<geometry>
+				<sphere  radius="0.3"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+	<joint name="joint1" type="fixed">
+		<parent link="base_link"/>
+		<child link="link1"/>
+		<origin xyz="1.84791 0.764999 0" rpy="0 0 0.3925" />
+		<axis xyz="0 0 1" />
+	</joint>
+
+	<joint name="joint2" type="fixed">
+		<parent link="link1"/>
+		<child link="link2"/>
+		<origin xyz="0.50046 0.86576 0" rpy="3.14 0 1.04667" />
+		<axis xyz="0 0 1" />
+	</joint>
+
+	<joint name="joint3" type="fixed">
+		<parent link="link2"/>
+		<child link="link3"/>
+		<origin xyz="0 0 1" rpy="0 0 0" />
+		<axis xyz="0 0 1" />
+	</joint>
+</robot>
