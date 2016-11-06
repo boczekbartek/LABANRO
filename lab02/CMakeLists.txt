@@ -134,7 +134,7 @@ include_directories(
 
 ## Declare a C++ executable
 add_executable(dh_to_urdf src/dh_to_urdf.cpp)
-
+add_executable(state_publisher src/state_publisher.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(anrobot_description_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -143,6 +143,8 @@ add_executable(dh_to_urdf src/dh_to_urdf.cpp)
 target_link_libraries(dh_to_urdf
   ${catkin_LIBRARIES}
 )
+target_link_libraries(state_publisher 
+  ${catkin_LIBRARIES})
 
 #############
 ## Install ##

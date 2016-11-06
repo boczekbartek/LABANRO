@@ -4,7 +4,7 @@
 #include <tf/transform_broadcaster.h>
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "state_pub");
+    ros::init(argc, argv, "state_publisher");
     ros::NodeHandle n;
     ros::Publisher joint_pub = n.advertise<sensor_msgs::JointState>("joint_states", 1);
     tf::TransformBroadcaster broadcaster;
@@ -19,17 +19,19 @@ int main(int argc, char** argv) {
     geometry_msgs::TransformStamped odom_trans;
     sensor_msgs::JointState joint_state;
     odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "axis";
+    odom_trans.child_frame_id = "base_link";
 
     while (ros::ok()) {
         //update joint_state
         joint_state.header.stamp = ros::Time::now();
         joint_state.name.resize(3);
         joint_state.position.resize(3);
+        joint_state.velocity.resize(3);
         joint_state.name[0] ="joint1";
-        joint_state.position[0] = swivel;
+        //joint_state.position[0] = swivel;
         joint_state.name[1] ="joint2";
-        joint_state.position[1] = tilt;
+        //joint_state.position[1] = tilt;
+        joint_state.velocity[1] = tilt;
         joint_state.name[2] ="joint3";
         joint_state.position[2] = height;
 
@@ -37,23 +39,24 @@ int main(int argc, char** argv) {
         // update transform
         // (moving in a circle with radius=2)
         odom_trans.header.stamp = ros::Time::now();
-        odom_trans.transform.translation.x = cos(angle)*2;
-        odom_trans.transform.translation.y = sin(angle)*2;
-        odom_trans.transform.translation.z = .7;
-        odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(angle+M_PI/2);
+//        odom_trans.transform.translation.x = cos(angle)*2;
+//        odom_trans.transform.translation.y = sin(angle)*2;
+//        odom_trans.transform.translation.z = .7;
+        //odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(angle+M_PI/2);
+        odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(0);
 
         //send the joint state and transform
         joint_pub.publish(joint_state);
         broadcaster.sendTransform(odom_trans);
 
         // Create new robot state
-        tilt += tinc;
-        if (tilt<-.5 || tilt>0) tinc *= -1;
-        height += hinc;
-        if (height>.2 || height<0) hinc *= -1;
-        swivel += degree;
-        angle += degree/4;
 
+
+        angle += degree/4;
+        swivel = sin(angle)*6;
+        tilt = sin (angle)*6;
+        height = cos (angle)*6;
+        std::cout << "sw" << swivel << "tilt" << tilt << "height" << height << std::endl;
         // This will adjust as needed per iteration
         loop_rate.sleep();
     }
