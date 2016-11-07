@@ -28,10 +28,9 @@ int main(int argc, char** argv) {
         joint_state.position.resize(3);
         joint_state.velocity.resize(3);
         joint_state.name[0] ="joint1";
-        //joint_state.position[0] = swivel;
+        joint_state.position[0] = swivel;
         joint_state.name[1] ="joint2";
-        //joint_state.position[1] = tilt;
-        joint_state.velocity[1] = tilt;
+        joint_state.position[1] = tilt;
         joint_state.name[2] ="joint3";
         joint_state.position[2] = height;
 
@@ -43,7 +42,7 @@ int main(int argc, char** argv) {
 //        odom_trans.transform.translation.y = sin(angle)*2;
 //        odom_trans.transform.translation.z = .7;
         //odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(angle+M_PI/2);
-        odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(0);
+        odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(angle+M_PI/2);
 
         //send the joint state and transform
         joint_pub.publish(joint_state);
@@ -53,10 +52,11 @@ int main(int argc, char** argv) {
 
 
         angle += degree/4;
-        swivel = sin(angle)*6;
-        tilt = sin (angle)*6;
-        height = cos (angle)*6;
-        std::cout << "sw" << swivel << "tilt" << tilt << "height" << height << std::endl;
+        if (!(swivel<-3.5 || swivel>1.6))
+            swivel = sin(angle)*3;
+        if (!(tilt<-0.93 || tilt>4))
+            tilt = sin (angle)*3;
+        height = cos (angle)*3;
         // This will adjust as needed per iteration
         loop_rate.sleep();
     }
