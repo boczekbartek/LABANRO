@@ -2,7 +2,7 @@
   <link name="base_link">
         <visual>
                 <geometry>
-                        <cylinder length="0.6" radius="0.2"/>
+                        <cylinder length="0.6" radius="0.15"/>
                 </geometry>
         </visual>
   </link>
@@ -10,11 +10,12 @@
   <link name="arm1">
 	<visual>
 		<geometry>
-			<box size = "2 .1 .1"/>
+      <cylinder length="2" radius="0.15"/>
+			
 		</geometry>
-		<origin xyz = "1 0 0"/>
+		<origin xyz = "1 0 0" rpy = "0 1.57 0"/>
 		<material name = "green">
-			<color rgba = "0 .9 0 1"/>
+			<color rgba = "0 .7 0 2"/>
 		</material>
 	</visual>
   </link>
@@ -22,7 +23,7 @@
   <link name="link1">
 	<visual>
 		<geometry>
-			<cylinder length="0.4" radius="0.1"/>
+			<box size = ".1 .1 .1"/>
 		</geometry>
 		<material name = "green"/>
 		<origin xyz = "2 0 0"/>
@@ -37,12 +38,12 @@
   <link name="arm2">
         <visual>
                 <geometry>
-                        <box size = "1 .1 .1"/>
+                        <cylinder length="1" radius="0.1"/>
                 </geometry>
 		<material name  = "blue">
-			<color rgba = " 0 0 .9 1"/>
+			<color rgba = " 0 0.2 .3 1"/>
 		</material>
-                <origin xyz = "0.5 0 0"/>
+                <origin xyz = "0.5 0 0" rpy = "0 1.57 0"/>
         </visual>
   </link>
 
@@ -50,7 +51,7 @@
   <link name="link2">
         <visual>
                 <geometry>
-                        <cylinder length="0.4" radius="0.1"/>
+                        <box size = ".1 .1 .1"/>
                 </geometry>
 		<material name = "blue"/>
 	<origin xyz = "1 0 0"/>
@@ -66,9 +67,10 @@
   <link name="arm3">
         <visual>
                 <geometry>
-                        <box size = ".02 .02 3"/>
+                        <box size = ".07 .07 2"/>
                 </geometry>
-                <origin xyz = "0 0 -1.5"/>
+                <origin xyz = "0 0 -1"/>
+                <material name = "blue"/>
         </visual>
   </link>
 
@@ -76,9 +78,12 @@
   <link name="link3">
         <visual>
                 <geometry>
-                        <sphere radius="0.1"/>
+                        <box size=".1 .2 .3"/>
                 </geometry>
 		<origin xyz = "0 0 0"/>
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
         </visual>
   </link>
 
@@ -106,7 +111,7 @@
   <joint name="joint3" type="prismatic">
     <parent link="link2"/>
     <child link="link3"/>
-    <limit effort="1000.0" lower="0.3" upper="3" velocity="0.5"/>
+    <limit effort="1000.0" lower="0.5" upper="2" velocity="0.5"/>
     <origin xyz="1 0 0" rpy="3.14159 0 0" />
     <axis xyz="0 0 1" />
   </joint>

@@ -11,7 +11,7 @@ typedef struct kinematicsManagmentStruct
     ros::ServiceClient *simple_client;
 } KinStruct;
 
-void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k)
+void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k, int whichFigure)
 {
     anrobot_description::FwdKinematics srv;
     srv.request.theta1 = msg->position[0];
@@ -25,18 +25,29 @@ void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k)
 
     marker.ns = "end_pose";
     marker.id = 0;
-    marker.type = visualization_msgs::Marker::ARROW;
+    if (whichFigure == 0){
+        marker.type = visualization_msgs::Marker::SPHERE;
+    
+    marker.color.r = 1.0f;
+    marker.color.g = 0.1f;
+    marker.color.b = 0.3f;
+    marker.color.a = 1.0;
+    }else{ 
+        marker.type = visualization_msgs::Marker::CUBE;
+         
+    marker.color.r = 0.4f;
+    marker.color.g = 0.7f;
+    marker.color.b = 0.1f;
+    marker.color.a = 1.0;
+    }
     marker.action = visualization_msgs::Marker::ADD;
 
     marker.scale.x = 0.5;
     marker.scale.y = 0.1;
     marker.scale.z = 0.1;
-    marker.pose.orientation.y = -1.0;
+    
     // Set the color -- be sure to set alpha to something non-zero!
-    marker.color.r = 1.0f;
-    marker.color.g = 0.1f;
-    marker.color.b = 0.3f;
-    marker.color.a = 1.0;
+    
 
     marker.lifetime = ros::Duration();
 
@@ -81,7 +92,7 @@ int main(int argc, char** argv)
 
     ros::NodeHandle n;
 
-    ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
+    ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker" , 1);
     ros::ServiceClient kdl_client = n.serviceClient<anrobot_description::FwdKinematics>("kdl_fwd");
     ros::ServiceClient simple_client = n.serviceClient<anrobot_description::FwdKinematics>("simple_fwd");
 
@@ -91,7 +102,7 @@ int main(int argc, char** argv)
     k.kdl_client = &kdl_client;
     k.simple_client = &simple_client;
     
-    ros::Subscriber get_joint_states = n.subscribe<sensor_msgs::JointState>("joint_states", 100, boost::bind(joint_states_cb, _1, k));
+    ros::Subscriber get_joint_states = n.subscribe<sensor_msgs::JointState>("joint_states", 100, boost::bind(joint_states_cb, _1, k,atoi(argv[1])));
     
     ros::spin();
 
