@@ -1,0 +1,109 @@
+<?xml version="1.0" standalone="no"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       name="test_robot">
+
+<xacro:property name="r1" value="0"/>
+<xacro:property name="p1" value="-0"/>
+<xacro:property name="yy1" value="0.3925"/>
+<xacro:property name="x1" value="1.84791"/>
+<xacro:property name="y1" value="0.764999"/>
+<xacro:property name="z1" value="0"/>
+<xacro:property name="l1" value="2"/>
+<xacro:property name="r2" value="3.14"/>
+<xacro:property name="p2" value="-0"/>
+<xacro:property name="yy2" value="1.04667"/>
+<xacro:property name="x2" value="0.50046"/>
+<xacro:property name="y2" value="0.86576"/>
+<xacro:property name="z2" value="0"/>
+<xacro:property name="l2" value="1"/>
+<xacro:property name="r3" value="0"/>
+<xacro:property name="p3" value="-0"/>
+<xacro:property name="yy3" value="0"/>
+<xacro:property name="x3" value="0"/>
+<xacro:property name="y3" value="0"/>
+<xacro:property name="z3" value="1"/>
+<xacro:property name="l3" value="1"/>
+
+	<link name="base_link">
+		<visual>
+			<geometry>
+				<cylinder length="0.6" radius="0.2"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<link name="base_link1">
+		<visual>
+			<geometry>
+				<cylinder length="${l1}" radius="0.2"/>
+			</geometry>
+			<origin xyz="${x1/2} ${y1/2} ${z1/2}" rpy="${r1} 1.57 ${yy1} " />
+		</visual>
+	</link>
+
+	<link name="link1">
+		<visual>
+			<geometry>
+				<cylinder length="${l2}" radius="0.1"/>
+			</geometry>
+			<material name="we">
+				<color rgba="0 6 2 1"/>
+			</material>
+			<origin xyz="${x2/2} ${y2/2} ${z2/2}" rpy="3.14 1.5707 ${yy2}"/>
+		</visual>
+	</link>
+
+	<link name="link2">
+		<visual>
+			<geometry>
+				<cylinder length="${l3}" radius="0.05"/>
+			</geometry>
+			<origin xyz="${x3/2} ${y3/2} ${z3/2}" rpy="0 0 0" />
+			<material name="w">
+				<color rgba="3 2 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+	<link name="link3">
+		<visual>
+			<geometry>
+				<box size=".1 .2 .3"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+	
+	<joint name="joint" type="continuous">
+		<parent link="base_link1"/>
+		<child link="base_link"/>
+		<limit effort="1000.0" lower="-3.5" upper="1.6" velocity="0.5"/>
+		<axis xyz="0 0 1" />
+	</joint>
+
+	<joint name="joint1" type="revolute">
+		<parent link="base_link1"/>
+		<child link="link1"/>
+		<origin xyz="${x1} ${y1} ${z1}" rpy="${r1} ${p1} ${yy1}" />
+		         <limit effort="1000.0" lower="-3.5" upper="1.6" velocity="0.5"/>
+		<axis xyz="0 0 1" />
+	</joint>
+
+	<joint name="joint2" type="prismatic">
+		<parent link="link1"/>
+		<child link="link2"/>
+		<origin xyz="${x2} ${y2} ${z2}" rpy="${r2} ${p2} ${yy2}" />
+		<limit effort="1000.0" lower="-0.81" upper="-0.05" velocity="0.5"/>
+		<axis xyz="0 0 1" />
+	</joint>
+
+	<joint name="joint3" type="fixed">
+		<parent link="link2"/>
+		<child link="link3"/>
+		<origin xyz="${x3} ${y3} ${z3}" rpy="${r3} ${p3} ${yy3}" />
+		<limit effort="1000.0" lower="-0.6" upper="-0.11" velocity="0.5"/>
+		<axis xyz="0 0 1" />
+	</joint>
+</robot>
