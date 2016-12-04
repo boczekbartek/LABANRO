@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   urdf
   message_generation
 )
-
+set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -136,11 +136,12 @@ include_directories(include
 # add_dependencies(anrobot_description ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(dh_to_urdf src/dh_to_urdf.cpp
+add_executable(gen_trajectory src/gen_trajectory.cpp
 )
-target_link_libraries(dh_to_urdf
+target_link_libraries(gen_trajectory
   ${catkin_LIBRARIES}
 )
+
 
 add_executable(kdl_fwd_kinematics src/kdl_fwd_kinematics.cpp
 )
@@ -178,7 +179,7 @@ target_link_libraries(set_param
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS dh_to_urdf simple_fwd_kinematics kdl_fwd_kinematics set_param
+install(TARGETS gen_trajectory simple_fwd_kinematics kdl_fwd_kinematics set_param
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -188,6 +189,7 @@ install(TARGETS dh_to_urdf simple_fwd_kinematics kdl_fwd_kinematics set_param
 #   FILES_MATCHING PATTERN "*.h"
 #   PATTERN ".svn" EXCLUDE
 # )
+
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES

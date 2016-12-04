@@ -11,7 +11,7 @@ typedef struct kinematicsManagmentStruct
     ros::ServiceClient *simple_client;
 } KinStruct;
 
-void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k, int whichFigure)
+void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k)
 {
     anrobot_description::FwdKinematics srv;
     srv.request.theta1 = msg->position[0];
@@ -25,21 +25,16 @@ void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k, in
 
     marker.ns = "end_pose";
     marker.id = 0;
-    if (whichFigure == 0){
+   
         marker.type = visualization_msgs::Marker::SPHERE;
     
     marker.color.r = 1.0f;
     marker.color.g = 0.1f;
     marker.color.b = 0.3f;
     marker.color.a = 1.0;
-    }else{ 
-        marker.type = visualization_msgs::Marker::CUBE;
+   
          
-    marker.color.r = 0.4f;
-    marker.color.g = 0.7f;
-    marker.color.b = 0.1f;
-    marker.color.a = 1.0;
-    }
+    
     marker.action = visualization_msgs::Marker::ADD;
 
     marker.scale.x = 0.5;
@@ -51,9 +46,10 @@ void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k, in
 
     marker.lifetime = ros::Duration();
 
+
         if(srv.request.use_kdl)
         {
-            if(k.kdl_client->call(srv))
+            if(k.kdl_client->call(srv))  //tu sie dzieje komunikacja, jest wywoływana metoda call 
             {
                 marker.pose = srv.response.end_pose;
             }
@@ -82,7 +78,7 @@ void joint_states_cb(const sensor_msgs::JointStateConstPtr &msg, KinStruct k, in
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "set_param");
+    ros::init(argc, argv, "set_param"); // this function must be called before any other roscpp function
     if(argc != 2)
     {
         ROS_ERROR_STREAM("Usage:  rosrun anrobot_description set_param arg" << "\n"
@@ -91,6 +87,8 @@ int main(int argc, char** argv)
     }
 
     ros::NodeHandle n;
+    //http://wiki.ros.org/roscpp/Overview/Initialization%20and%20Shutdown ->chapter 1.2
+
 
     ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker" , 1);
     ros::ServiceClient kdl_client = n.serviceClient<anrobot_description::FwdKinematics>("kdl_fwd");
@@ -102,7 +100,7 @@ int main(int argc, char** argv)
     k.kdl_client = &kdl_client;
     k.simple_client = &simple_client;
     
-    ros::Subscriber get_joint_states = n.subscribe<sensor_msgs::JointState>("joint_states", 100, boost::bind(joint_states_cb, _1, k,atoi(argv[1])));
+    ros::Subscriber get_joint_states = n.subscribe<sensor_msgs::JointState>("joint_states", 100, boost::bind(joint_states_cb, _1, k));
     
     ros::spin();
 
