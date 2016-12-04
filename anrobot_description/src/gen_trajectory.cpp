@@ -4,7 +4,7 @@
 #include <tf/transform_broadcaster.h>
 #include <std_msgs/String.h>
 
-float interpolate(float goal, float current, float time_delta){
+float interpolate(float goal, float current, float time_delta){ //funkcja interpolująca
     float differance = goal - current;
     if (differance < -time_delta){
     	return current-time_delta;
@@ -19,11 +19,11 @@ void chatterCallback(const sensor_msgs::JointStateConstPtr &msg, sensor_msgs::Jo
 {
    ros::Rate loop_rate(50);
   ROS_INFO("Positions from JSP: [%f %f %f]", msg->position[0],msg->position[1],msg->position[2]);
-  
+  joint_state.header.stamp = ros::Time::now();
   for (int i = 0; i<3; ++i)
   {
-    joint_state.position[i] = msg->position[i]+1;
-    // joint_state.position[0] = interpolate(msg->position[i],joint_state.position[i],0.1);
+    //joint_state.position[i] = msg->position[i]+1;
+    joint_state.position[i] = interpolate(msg->position[i],joint_state.position[i],0.05);
   }
 
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
     float initial_position[3]; //tablica przechowue początkowe położewnia stawów
     for (int i = 0; i<3; ++i)
     { //inicjalizacja tablicy TODO docelowo zczytywanie z argsów
-      initial_position[i] = 12;
+      initial_position[i] = 0;
     }
 
     sensor_msgs::JointState joint_state; 
