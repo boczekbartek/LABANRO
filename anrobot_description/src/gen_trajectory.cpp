@@ -3,11 +3,6 @@
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 #include <std_msgs/String.h>
-typedef struct kinematicsManagmentStruct
-{
-    bool use_kdl;
-} KinStruct;
-
 
 float interpolate(float goal, float current, float time_delta){
     float differance = goal - current;
@@ -71,66 +66,6 @@ int main(int argc, char** argv) {
 
 
     ros::spin();
-
-
-
-
-
-
-
-
-
-//     const double degree = M_PI/180;
-
-//     // robot state
-//     double tilt = 0, tinc = degree, swivel=0, angle=0, height=0, hinc=0.005;
-
-//     // message declarations
-//     geometry_msgs::TransformStamped odom_trans;
-//     sensor_msgs::JointState joint_state;
-//     odom_trans.header.frame_id = "odom";
-//     odom_trans.child_frame_id = "base_link";
-
-//     while (ros::ok()) {
-//         //update joint_state
-//         joint_state.header.stamp = ros::Time::now();
-//         joint_state.name.resize(3);
-//         joint_state.position.resize(3);
-//         joint_state.velocity.resize(3);
-//         joint_state.name[0] ="joint1";
-//         joint_state.position[0] = swivel;
-//         joint_state.name[1] ="joint2";
-//         joint_state.position[1] = tilt;
-//         joint_state.name[2] ="joint3";
-//         joint_state.position[2] = height;
-
-
-//         // update transform
-//         // (moving in a circle with radius=2)
-//         odom_trans.header.stamp = ros::Time::now();
-// //        odom_trans.transform.translation.x = cos(angle)*2;
-// //        odom_trans.transform.translation.y = sin(angle)*2;
-// //        odom_trans.transform.translation.z = .7;
-//         //odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(angle+M_PI/2);
-//         odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(angle+M_PI/2);
-
-//         //send the joint state and transform
-//         joint_pub.publish(joint_state);
-//         broadcaster.sendTransform(odom_trans);
-
-//         // Create new robot state
-
-
-//         angle += degree/4;
-//         if (!(swivel<-3.5 || swivel>1.6))
-//             swivel = sin(angle)*3;
-//         if (!(tilt<-0.93 || tilt>4))
-//             tilt = sin (angle)*3;
-//         height = cos (angle)*3;
-//         // This will adjust as needed per iteration
-//         loop_rate.sleep();
-//     }
-
 
     return 0;
 }
