@@ -53,11 +53,11 @@ set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
+add_message_files(
+    FILES
+    PoseMessage.msg
 #   Message2.msg
-# )
+ )
 
 ## Generate services in the 'srv' folder
 add_service_files(
@@ -142,33 +142,33 @@ target_link_libraries(gen_trajectory
   ${catkin_LIBRARIES}
 )
 
-add_executable(check_joint_states src/check_joint_states.cpp
-)
-target_link_libraries(check_joint_states
-  ${catkin_LIBRARIES}
-)
-add_executable(kdl_fwd_kinematics src/kdl_fwd_kinematics.cpp
-)
-target_link_libraries(kdl_fwd_kinematics
-  ${catkin_LIBRARIES}
-)
+# add_executable(check_joint_states src/check_joint_states.cpp
+# )
+# target_link_libraries(check_joint_states
+#   ${catkin_LIBRARIES}
+# )
+# add_executable(kdl_fwd_kinematics src/kdl_fwd_kinematics.cpp
+# )
+# target_link_libraries(kdl_fwd_kinematics
+#   ${catkin_LIBRARIES}
+# )
 
-add_executable(simple_fwd_kinematics src/simple_fwd_kinematics.cpp
-)
-target_link_libraries(simple_fwd_kinematics
-  ${catkin_LIBRARIES}
-)
+# add_executable(simple_fwd_kinematics src/simple_fwd_kinematics.cpp
+# )
+# target_link_libraries(simple_fwd_kinematics
+#   ${catkin_LIBRARIES}
+# )
 
-add_executable(gen_pose src/gen_pose.cpp
+add_executable(pose_param_talker src/pose_param_talker.cpp
 )
-target_link_libraries(gen_pose
+target_link_libraries(pose_param_talker
   ${catkin_LIBRARIES}
 )
-add_executable(set_param src/set_param.cpp
-)
-target_link_libraries(set_param
-  ${catkin_LIBRARIES}
-)
+# add_executable(set_param src/set_param.cpp
+# )
+# target_link_libraries(set_param
+#   ${catkin_LIBRARIES}
+# )
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(anrobot_description_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -188,7 +188,7 @@ target_link_libraries(set_param
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS gen_trajectory simple_fwd_kinematics kdl_fwd_kinematics set_param check_joint_states gen_pose
+install(TARGETS gen_trajectory pose_param_talker
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -3,42 +3,68 @@
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 #include <std_msgs/String.h>
+#include <anrobot_description/PoseMessage.h>
 
 float interpolate(float goal, float current, float time_delta){ //funkcja interpolująca
-    float differance = goal - current;
-    if (differance < -time_delta){
-    	return current-time_delta;
-    }else if(differance > time_delta){
-    	return current+time_delta;
-    }else{
-    	return goal;
-    }
+  float differance = goal - current;
+  if (differance < -time_delta){
+   return current-time_delta;
+ }else if(differance > time_delta){
+   return current+time_delta;
+ }else{
+   return goal;
+ }
 } 
+
+
+void pose_callback(const anrobot_description::PoseMessage &msg/*, geometry_msgs::PoseStamped &pose_state,const ros::Publisher &pose_pub*/)
+{
+  // ros::Rate loop_rate(50);
+  // pose_state.header.seq = 1;
+  // pose_state.header.stamp = ros::Time::now();
+  // pose_state.header.frame_id = "/base_link";
+  // pose_state.pose.position.x = interpolate(pose_state.pose.position.x ,msg->a, &msg->d);
+  // pose_state.pose.position.y = interpolate(pose_state.pose.position.y,msg->b,msg->d);
+  // pose_state.pose.position.z = interpolate(pose_state.pose.position.z,msg->c,msg->d);
+  // pose_state.pose.orientation.x = 1;
+  // pose_state.pose.orientation.y = 1;
+  // pose_state.pose.orientation.z = 1;
+  // pose_state.pose.orientation.w = 1;
+  // pose_pub.publish(pose_state);
+
+
+
+  // loop_rate.sleep();
+}
+
+
 
 void chatterCallback(const sensor_msgs::JointStateConstPtr &msg, sensor_msgs::JointState &joint_state,const ros::Publisher &joint_pub)
 {
-   ros::Rate loop_rate(50);
-  ROS_INFO("Positions from JSP: [%f %f %f]", msg->position[0],msg->position[1],msg->position[2]);
-  joint_state.header.stamp = ros::Time::now();
-  for (int i = 0; i<3; ++i)
-  {
+ ros::Rate loop_rate(50);
+ ROS_INFO("Positions from JSP: [%f %f %f]", msg->position[0],msg->position[1],msg->position[2]);
+ joint_state.header.stamp = ros::Time::now();
+ for (int i = 0; i<3; ++i)
+ {
     //joint_state.position[i] = msg->position[i]+1;
-    joint_state.position[i] = interpolate(msg->position[i],joint_state.position[i],0.05);
-  }
+  joint_state.position[i] = interpolate(msg->position[i],joint_state.position[i],0.05);
+}
 
 
-  ROS_INFO("Publisher positions: [%f %f %f]", joint_state.position[0],joint_state.position[1],joint_state.position[2]);
-  
-   joint_pub.publish(joint_state);
-   loop_rate.sleep();
+ROS_INFO("Publisher positions: [%f %f %f]", joint_state.position[0],joint_state.position[1],joint_state.position[2]);
+
+joint_pub.publish(joint_state);
+loop_rate.sleep();
 }
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "interpolator");
-    ros::NodeHandle n;
-    ros::Publisher joint_pub = n.advertise<sensor_msgs::JointState>("pozycje_jointow", 1);
+  ros::init(argc, argv, "interpolator");
+  ros::NodeHandle n;
+  ros::Publisher joint_pub = n.advertise<sensor_msgs::JointState>("pozycje_jointow", 1);
     // tf::TransformBroadcaster broadcaster;
     // ros::Rate loop_rate(30);
+  //ros::Publisher pose_pub = n.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 1);
+
     float initial_position[3]; //tablica przechowue początkowe położewnia stawów
     for (int i = 0; i<3; ++i)
     { //inicjalizacja tablicy TODO docelowo zczytywanie z argsów
@@ -58,14 +84,26 @@ int main(int argc, char** argv) {
     joint_state.name[2] ="joint3";
     joint_state.position[2] = initial_position[2];
     joint_pub.publish(joint_state);
+
+    geometry_msgs::PoseStamped pose_state;
+    pose_state.header.seq = 1;
+    pose_state.header.stamp = ros::Time::now();
+    pose_state.header.frame_id = "/base_link";
+    pose_state.pose.position.x = initial_position[0];
+    pose_state.pose.position.y = initial_position[1];
+    pose_state.pose.position.z = initial_position[2];
+    pose_state.pose.orientation.x = 1;
+    pose_state.pose.orientation.y = 1;
+    pose_state.pose.orientation.z = 1;
+    pose_state.pose.orientation.w = 1;
+    pose_pub.publish(pose_state);
     ros::Subscriber sub = n.subscribe<sensor_msgs::JointState>("different_joint_states", 1000, 
                                                                boost::bind(chatterCallback,_1,joint_state,joint_pub)); //tutaj trzea zrobic boost::bind zeby dac jako argumant fukcji chattercallback
-    
-    std::cout << joint_state.position[0] <<std::endl;
-    // joint_pub.publish(joint_state);
+    ros::Subscriber pose_sub = n.subscribe<anrobot_description::PoseMessage>("pose_topic", 1000, pose_callback/*, pose_state, pose_pub*/);
+      // joint_pub.publish(joint_state);
 
 
     ros::spin();
 
     return 0;
-}
+  }
