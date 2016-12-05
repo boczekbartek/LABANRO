@@ -10,6 +10,7 @@
  		<node name="suwaczki" pkg="joint_state_publisher" type="joint_state_publisher">
 			<remap from="joint_states" to="different_joint_states" />
  		</node>
+ 		<!-- <node name="pose_interpolator" pkg="anrobot_description" type="gen_pose"/> -->
 		<node name="interpolator" pkg="anrobot_description" type="gen_trajectory"/>
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find anrobot_description)/urdf.rviz" required="true" />
 </launch>

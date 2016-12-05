@@ -3,7 +3,7 @@
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 #include <std_msgs/String.h>
-#include <anrobot_description/PoseMessage.h>
+
 
 float interpolate(float goal, float current, float time_delta){ //funkcja interpolująca
   float differance = goal - current;
@@ -15,29 +15,6 @@ float interpolate(float goal, float current, float time_delta){ //funkcja interp
    return goal;
  }
 } 
-
-
-void pose_callback(const anrobot_description::PoseMessage &msg/*, geometry_msgs::PoseStamped &pose_state,const ros::Publisher &pose_pub*/)
-{
-  // ros::Rate loop_rate(50);
-  // pose_state.header.seq = 1;
-  // pose_state.header.stamp = ros::Time::now();
-  // pose_state.header.frame_id = "/base_link";
-  // pose_state.pose.position.x = interpolate(pose_state.pose.position.x ,msg->a, &msg->d);
-  // pose_state.pose.position.y = interpolate(pose_state.pose.position.y,msg->b,msg->d);
-  // pose_state.pose.position.z = interpolate(pose_state.pose.position.z,msg->c,msg->d);
-  // pose_state.pose.orientation.x = 1;
-  // pose_state.pose.orientation.y = 1;
-  // pose_state.pose.orientation.z = 1;
-  // pose_state.pose.orientation.w = 1;
-  // pose_pub.publish(pose_state);
-
-
-
-  // loop_rate.sleep();
-}
-
-
 
 void chatterCallback(const sensor_msgs::JointStateConstPtr &msg, sensor_msgs::JointState &joint_state,const ros::Publisher &joint_pub)
 {
@@ -85,22 +62,8 @@ int main(int argc, char** argv) {
     joint_state.position[2] = initial_position[2];
     joint_pub.publish(joint_state);
 
-    geometry_msgs::PoseStamped pose_state;
-    pose_state.header.seq = 1;
-    pose_state.header.stamp = ros::Time::now();
-    pose_state.header.frame_id = "/base_link";
-    pose_state.pose.position.x = initial_position[0];
-    pose_state.pose.position.y = initial_position[1];
-    pose_state.pose.position.z = initial_position[2];
-    pose_state.pose.orientation.x = 1;
-    pose_state.pose.orientation.y = 1;
-    pose_state.pose.orientation.z = 1;
-    pose_state.pose.orientation.w = 1;
-    pose_pub.publish(pose_state);
     ros::Subscriber sub = n.subscribe<sensor_msgs::JointState>("different_joint_states", 1000, 
                                                                boost::bind(chatterCallback,_1,joint_state,joint_pub)); //tutaj trzea zrobic boost::bind zeby dac jako argumant fukcji chattercallback
-    ros::Subscriber pose_sub = n.subscribe<anrobot_description::PoseMessage>("pose_topic", 1000, pose_callback/*, pose_state, pose_pub*/);
-      // joint_pub.publish(joint_state);
 
 
     ros::spin();

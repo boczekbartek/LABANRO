@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   urdf
   message_generation
 )
-set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++14 ${CMAKE_CXX_FLAGS}")
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -75,7 +75,7 @@ add_service_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  std_msgs geometry_msgs std_srvs
+  std_msgs geometry_msgs std_srvs anrobot_description
 )
 
 ################################################
@@ -158,7 +158,11 @@ target_link_libraries(gen_trajectory
 # target_link_libraries(simple_fwd_kinematics
 #   ${catkin_LIBRARIES}
 # )
-
+add_executable(gen_pose src/gen_pose.cpp
+)
+target_link_libraries(gen_pose
+  ${catkin_LIBRARIES}
+)
 add_executable(pose_param_talker src/pose_param_talker.cpp
 )
 target_link_libraries(pose_param_talker
@@ -188,7 +192,7 @@ target_link_libraries(pose_param_talker
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS gen_trajectory pose_param_talker
+install(TARGETS gen_trajectory pose_param_talker gen_pose
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
