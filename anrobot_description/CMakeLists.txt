@@ -159,6 +159,11 @@ target_link_libraries(simple_fwd_kinematics
   ${catkin_LIBRARIES}
 )
 
+add_executable(gen_pose src/gen_pose.cpp
+)
+target_link_libraries(gen_pose
+  ${catkin_LIBRARIES}
+)
 add_executable(set_param src/set_param.cpp
 )
 target_link_libraries(set_param
@@ -183,7 +188,7 @@ target_link_libraries(set_param
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS gen_trajectory simple_fwd_kinematics kdl_fwd_kinematics set_param check_joint_states
+install(TARGETS gen_trajectory simple_fwd_kinematics kdl_fwd_kinematics set_param check_joint_states gen_pose
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
