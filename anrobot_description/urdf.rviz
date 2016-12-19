@@ -59,7 +59,9 @@ Visualization Manager:
       Queue Size: 100
       Value: true
     - Class: rviz/Pose
-      Topic: pose_position
+      Topic: move_base_simple/goal
+      Shape: Axes
+      Enabled: true
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
