@@ -12,6 +12,7 @@
  		</node>
  		<!-- <node name="pose_interpolator" pkg="anrobot_description" type="gen_pose"/> -->
 		<node name="interpolator" pkg="anrobot_description" type="gen_trajectory"/>
+        <node name="marker_generator" pkg="anrobot_description" type="gen_pose"/>
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find anrobot_description)/urdf.rviz" required="true" />
 </launch>
 
